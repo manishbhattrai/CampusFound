@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="row g-4">
+
+        <!-- SIDEBAR: Profile Card -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm text-center p-4">
+                <div class="position-relative d-inline-block mx-auto mb-3">
+                    {% if user.profile_image %}
+                        <img src="{{ user.profile_image.url }}" class="rounded-circle border p-1" width="120" height="120" style="object-fit: cover;">
+                    {% else %}
+                        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto border" style="width: 120px; height: 120px;">
+                            <i class="fas fa-user fa-3x text-muted opacity-50"></i>
+                        </div>
+                    {% endif %}
+                    <span class="position-absolute bottom-0 end-0 bg-success border border-white rounded-circle p-2" title="Active Account"></span>
+                </div>
+
+                <h4 class="fw-semibold mb-1">{{ user.get_full_name }}</h4>
+                <p class="text-muted small mb-3">Student • ID: {{ user.student_id }}</p>
+
+                <div class="d-flex justify-content-center gap-2 mb-4">
+                    <span class="badge badge-found px-3 py-2 rounded-pill">Verified Student</span>
+                </div>
+
+                <hr class="opacity-10">
+
+                <div class="row text-center mt-3">
+                    <div class="col-6 border-end">
+                        <h6 class="fw-bold mb-0">{{ my_items_count|default:"0" }}</h6>
+                        <small class="text-muted">Reports</small>
+                    </div>
+                    <div class="col-6">
+                        <h6 class="fw-bold mb-0">{{ my_claims_count|default:"0" }}</h6>
+                        <small class="text-muted">Claims</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Links -->
+            <div class="card border-0 shadow-sm mt-4 overflow-hidden">
+                <div class="list-group list-group-flush">
+                    <a href="{% url 'change-password' %}" class="list-group-item list-group-item-action py-3 small fw-medium">
+                        <i class="fas fa-key me-2 text-muted"></i> Change Password
+                    </a>
+                    <a href="{% url 'deactivate-account' %}" class="list-group-item list-group-item-action py-3 small fw-medium text-danger">
+                        <i class="fas fa-trash-alt me-2"></i> Deactivate Account
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT: Details -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm p-4 p-md-5">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-semibold mb-0">Personal Information</h5>
+                     <a href="{% url 'update-profile' %}">
+                    <button class="btn btn-sm btn-outline-primary rounded-pill px-4">Edit Profile</button>
+                     </a>
+                </div>
+
+                <div class="row g-4">
+                    <!-- Student ID -->
+                    <div class="col-md-6">
+                        <label class="small text-muted d-block mb-1">Student Identification Number</label>
+                        <p class="fw-medium border-bottom pb-2">{{ user.student_id }}</p>
+                    </div>
+
+                    <!-- Email -->
+                    <div class="col-md-6">
+                        <label class="small text-muted d-block mb-1">Email Address</label>
+                        <p class="fw-medium border-bottom pb-2">{{ user.email }}</p>
+                    </div>
+
+                    <!-- First Name -->
+                    <div class="col-md-4">
+                        <label class="small text-muted d-block mb-1">First Name</label>
+                        <p class="fw-medium border-bottom pb-2">{{ user.first_name }}</p>
+                    </div>
+
+                    <!-- Middle Name -->
+                    <div class="col-md-4">
+                        <label class="small text-muted d-block mb-1">Middle Name</label>
+                        <p class="fw-medium border-bottom pb-2">{{ user.middle_name|default:"—" }}</p>
+                    </div>
+
+                    <!-- Last Name -->
+                    <div class="col-md-4">
+                        <label class="small text-muted d-block mb-1">Last Name</label>
+                        <p class="fw-medium border-bottom pb-2">{{ user.last_name }}</p>
+                    </div>
+
+                    <!-- College -->
+                    <div class="col-12">
+                        <label class="small text-muted d-block mb-1">Affiliated College</label>
+                        <div class="d-flex align-items-center p-3 bg-light rounded-3 mt-1">
+                            <i class="fas fa-university text-primary me-3 fs-4"></i>
+                            <div>
+                                <p class="fw-semibold mb-0">{{ user.college.name }}</p>
+                                <p class="text-muted small mb-0">Official member of this department.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="fw-semibold mt-5 mb-4">Security Overview</h5>
+                <div class="p-3 border rounded-3 d-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-shield-halved text-success me-3 fs-4"></i>
+                        <div>
+                            <p class="small fw-semibold mb-0">Two-Step Verification</p>
+                            <p class="text-muted small mb-0">Keep your account secure by adding another layer.</p>
+                        </div>
+                    </div>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" checked>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="row g-0">
+                    <!-- Left Sidebar (Info) -->
+                    <div class="col-md-4 bg-primary text-white p-4 p-md-5 d-flex flex-column justify-content-center">
+                        <h3 class="fw-bold mb-3">Create a Report</h3>
+                        <p class="opacity-75 small">Whether you've lost something or found something, providing clear details helps the community connect faster.</p>
+                        <ul class="list-unstyled small mt-4">
+                            <li class="mb-2"><i class="fas fa-check-circle me-2"></i> Be specific with titles</li>
+                            <li class="mb-2"><i class="fas fa-check-circle me-2"></i> Upload a clear photo</li>
+                            <li class="mb-2"><i class="fas fa-check-circle me-2"></i> Set a security question</li>
+                        </ul>
+                    </div>
+
+                    <!-- Right Side (Form) -->
+                    <div class="col-md-8 bg-white p-4 p-md-5">
+
+                        <!-- Global Errors -->
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-danger border-0 rounded-3 small">
+                                {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                            </div>
+                        {% endif %}
+
+                        <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+
+                            <div class="row g-3">
+                                <div class="col-md-8">
+                                    <label class="form-label small fw-bold text-secondary text-uppercase">Item Name</label>
+                                    {{ form.item_name }}
+                                    {% if form.item_name.errors %}<div class="text-danger small mt-1">{{ form.item_name.errors.0 }}</div>{% endif %}
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label small fw-bold text-secondary text-uppercase">Status</label>
+                                    {{ form.status }}
+                                    {% if form.status.errors %}<div class="text-danger small mt-1">{{ form.status.errors.0 }}</div>{% endif %}
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-secondary text-uppercase">Category</label>
+                                    {{ form.category }}
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label small fw-bold text-secondary text-uppercase">Date of Incident</label>
+                                    {{ form.date_happened }}
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold text-secondary text-uppercase">Location</label>
+                                    {{ form.location }}
+                                    {% if form.location.errors %}<div class="text-danger small mt-1">{{ form.location.errors.0 }}</div>{% endif %}
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold text-secondary text-uppercase">Description</label>
+                                    {{ form.description }}
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold text-secondary text-uppercase">Upload Image</label>
+                                    <div class="input-group">
+                                        {{ form.image }}
+                                    </div>
+                                </div>
+
+                                <!-- Security Question Highlighted -->
+                                <div class="col-12 mt-4">
+                                    <div class="p-3 rounded-4" style="background-color: #f0f3ff; border: 1px dashed #5c67f2;">
+                                        <label class="form-label small fw-bold text-primary text-uppercase">
+                                            <i class="fas fa-lock me-1"></i> Security Question
+                                        </label>
+                                        <p class="text-muted" style="font-size: 0.75rem;">Only required for <b>Found</b> items. Ask something only the owner knows.</p>
+                                        {{ form.verification_question }}
+                                        {% if form.verification_question.errors %}<div class="text-danger small mt-1">{{ form.verification_question.errors.0 }}</div>{% endif %}
+                                    </div>
+                                </div>
+
+                                <div class="col-12 mt-5 d-flex gap-2">
+                                    <button type="submit" class="btn btn-primary px-5 py-2 rounded-pill fw-bold">Post Report</button>
+                                    <a href="{% url 'student-dashboard' %}" class="btn btn-light border px-4 py-2 rounded-pill fw-medium text-muted">Cancel</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

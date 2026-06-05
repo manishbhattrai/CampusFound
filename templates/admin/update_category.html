@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+
+            <div class="card border-0 shadow-sm p-4 p-md-5 rounded-4">
+                <div class="text-center mb-4">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-pen-to-square fs-4"></i>
+                    </div>
+                    <h3 class="fw-bold text-dark">Update Category</h3>
+                    <p class="text-muted small">Modifying details for: <span class="text-primary fw-bold">{{ category.name }}</span></p>
+                </div>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary text-uppercase">Category Name</label>
+                        {{ form.name }}
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-secondary text-uppercase">Description</label>
+                        {{ form.description }}
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold shadow-sm py-2">
+                            Update Category
+                        </button>
+                        <a href="{% url 'category-list' %}" class="btn btn-link text-muted text-decoration-none small mt-1 text-center">
+                            Go back to list
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="mb-5">
+        <h2 class="fw-bold text-dark">System Administrator</h2>
+        <p class="text-muted">Master control for colleges and staff accounts.</p>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="row g-4 mb-5 text-center">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-4 rounded-4">
+                <h6 class="text-muted small text-uppercase fw-bold mb-2">Total Colleges</h6>
+                <h2 class="fw-bold text-primary mb-0">{{ total_colleges }}</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-4 rounded-4">
+                <h6 class="text-muted small text-uppercase fw-bold mb-2">Total Students</h6>
+                <h2 class="fw-bold text-primary mb-0">{{ total_students }}</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-4 rounded-4">
+                <h6 class="text-muted small text-uppercase fw-bold mb-2">Staff Accounts</h6>
+                <h2 class="fw-bold text-primary mb-0">{{ total_staff_accounts }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Quick Actions -->
+        <div class="col-md-4">
+            <h5 class="fw-bold mb-3">Management Tools</h5>
+            <div class="card border-0 shadow-sm rounded-4 p-3">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'create-college' %}" class="btn btn-primary rounded-pill py-2 fw-bold text-start px-3">
+                        <i class="fas fa-university me-2"></i> Create New College
+                    </a>
+                    <a href="{% url 'create-college-user' %}" class="btn btn-outline-primary rounded-pill py-2 fw-bold text-start px-3">
+                        <i class="fas fa-user-plus me-2"></i> Create College User
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Colleges List -->
+        <div class="col-md-8">
+            <h5 class="fw-bold mb-3">Registered Colleges</h5>
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr class="small text-muted fw-bold">
+                                <th class="px-4">LOGO</th>
+                                <th>COLLEGE NAME</th>
+                                <th>ADDRESS</th>
+                                <th class="text-end px-4">ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for col in colleges %}
+                            <tr>
+                                <td class="px-4">
+                                    {% if col.logo %}
+                                        <img src="{{ col.logo.url }}" width="35" height="35" class="rounded border">
+                                    {% else %}
+                                        <div class="bg-light rounded border text-center pt-1" style="width:35px; height:35px;"><i class="fas fa-school text-muted small"></i></div>
+                                    {% endif %}
+                                </td>
+                                <td><span class="fw-bold text-dark">{{ col.name }}</span></td>
+                                <td><span class="small text-muted">{{ col.address|truncatechars:40 }}</span></td>
+                                <td class="text-end px-4">
+                                    <button class="btn btn-sm btn-light border rounded-pill px-3">Edit</button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

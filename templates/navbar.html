@@ -1,0 +1,100 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom sticky-top py-3">
+    <div class="container">
+        <!-- BRAND: Dynamic redirect -->
+        <a class="navbar-brand fw-semibold text-primary" href="{% if not user.is_authenticated %}{% url 'home' %}{% elif user.is_superuser %}{% url 'admin-dashboard' %}{% elif user.role == 'college' %}{% url 'college-dashboard' %}{% else %}{% url 'student-dashboard' %}{% endif %}">
+            <span class="bg-primary text-white rounded-3 px-2 me-1">C</span> CampusFound
+        </a>
+
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+
+                {% if user.is_authenticated %}
+
+                    <!-- SUPERUSER (DJANGO ADMIN) NAVIGATION -->
+                    {% if user.is_superuser %}
+                        <li class="nav-item">
+                            <a class="nav-link px-3 fw-medium text-dark" href="{% url 'admin-dashboard' %}">Admin Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 fw-medium text-dark" href="{% url 'category-list' %}">Manage Category</a>
+                        </li>
+
+                    <!-- COLLEGE STAFF NAVIGATION -->
+                    {% elif user.role == "college" %}
+                        <li class="nav-item">
+                            <a class="nav-link px-3 fw-medium text-dark" href="{% url 'college-dashboard' %}">College Panel</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 fw-medium text-dark" href="{% url 'student-list' %}">Student List</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 fw-medium text-dark position-relative" href="{% url 'registration-requests' %}">
+                                Requests
+
+                            </a>
+                        </li>
+                    {% elif user.role == "student" %}
+                        <li class="nav-item">
+                            <a class="nav-link px-3 fw-medium text-dark" href="{% url 'student-dashboard' %}">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 fw-medium text-dark" href="{% url 'get-reports' %}">Reports</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 fw-medium text-dark" href="{% url 'my-reports' %}">My Reports</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 fw-medium text-dark" href="{% url 'my-claims' %}">My Claims</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link px-3 fw-medium text-dark" href="{% url 'manage-incoming-claims' %}">Incoming Claims</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item dropdown ms-lg-3 border-start ps-lg-3">
+                        <a class="nav-link dropdown-toggle fw-medium text-dark" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            {% if user.is_superuser %}
+                                System Admin
+                            {% elif user.role == "college" %}
+                                {{ user.college.name }}
+                            {% else %}
+                                {{ user.first_name }}
+                            {% endif %}
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm mt-3 rounded-4 px-2" aria-labelledby="userDropdown">
+                            {% if user.role == "student" %}
+                                <li><a class="dropdown-item small py-2 rounded-3" href="{% url 'profile' %}"><i class="fas fa-user-circle me-2 opacity-50"></i> View Profile</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                            {% endif %}
+                            <li>
+                                <form action="{% url 'logout' %}" method="post" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item small py-2 rounded-3 text-danger fw-bold border-0 bg-transparent w-100 text-start">
+                                        <i class="fas fa-sign-out-alt me-2"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+
+                {% else %}
+                    <!-- GUEST NAVIGATION -->
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium text-dark" href="{% url 'home' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link px-3 fw-medium text-primary fw-bold" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <a class="btn btn-outline-primary btn-sm rounded-pill px-4 fw-medium" href="{% url 'student-register' %}">Sign Up</a>
+                    </li>
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
+</nav>

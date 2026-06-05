@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CampusFound</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f6f8fb; color: #4a5568; }
+        .bg-primary { background-color: #5c67f2 !important; }
+        .text-primary { color: #5c67f2 !important; }
+        .btn-primary { background-color: #5c67f2; border: none; }
+
+        /* Soft Card Style */
+        .card { border: none; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.03); }
+        .rounded-4 { border-radius: 16px !important; }
+
+        /* Message Toasts */
+        .message-toast-container { position: fixed; bottom: 40px; right: 40px; z-index: 1060; }
+        .alert { border-radius: 12px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+
+        /* Status Badges */
+        .badge-lost { background: #fff1f2; color: #e11d48; font-weight: 500; }
+        .badge-found { background: #f0fdf4; color: #16a34a; font-weight: 500; }
+    </style>
+</head>
+<body>
+    <div class="message-toast-container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert bg-white border shadow-lg alert-dismissible fade show role="alert" style="border-radius: 12px;">
+                <div class="d-flex align-items-center">
+                    <!-- Dynamic Icon based on message type -->
+                    <div class="me-3">
+                        {% if message.tags == 'error' %}
+                            <i class="fas fa-circle-xmark text-danger fs-5"></i>
+                        {% else %}
+                            <i class="fas fa-circle-check text-success fs-5"></i>
+                        {% endif %}
+                    </div>
+
+                    <div class="pe-4 text-dark small fw-medium">
+                        {{ message }}
+                    </div>
+
+                    <!-- FIXED CLOSE BUTTON -->
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert"
+                            aria-label="Close"
+                            style="font-size: 0.75rem;">
+                    </button>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+    {% include "navbar.html" %}
+
+    <main class="py-5">
+        {% block content %}{% endblock %}
+    </main>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

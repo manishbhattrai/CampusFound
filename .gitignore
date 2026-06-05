@@ -1,0 +1,17 @@
+# Virtual environment
+.venv/
+
+# Environment variables
+.env
+
+# PyCharm
+.idea/
+
+# Python cache
+__pycache__/
+
+# User uploads
+media/
+
+
+

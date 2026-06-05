@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-0 shadow-sm p-4 p-md-5 rounded-4">
+                <h3 class="fw-bold mb-1">Onboard New College</h3>
+                <p class="text-muted small mb-4">Add a new campus department or branch to the system.</p>
+
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">College Name</label>
+                        <input type="text" name="name" class="form-control bg-light border-0" placeholder="e.g. College of Engineering" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Address/Location</label>
+                        <input type="text" name="address" class="form-control bg-light border-0" placeholder="e.g. Main Campus, Building B" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold">College Logo</label>
+                        <input type="file" name="logo" class="form-control bg-light border-0">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 py-2 rounded-pill fw-bold">Register College</button>
+                    <a href="{% url 'admin-dashboard' %}" class="btn btn-link w-100 text-muted small mt-2 text-decoration-none text-center">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

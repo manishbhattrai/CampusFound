@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4 text-center">
+                <ol class="breadcrumb d-inline-flex bg-white shadow-sm px-3 py-2 rounded-pill">
+                    <li class="breadcrumb-item"><a href="{% url 'admin-dashboard' %}" class="text-decoration-none text-muted small">Admin</a></li>
+                    <li class="breadcrumb-item active small text-dark fw-bold" aria-current="page">New Category</li>
+                </ol>
+            </nav>
+
+            <div class="card border-0 shadow-sm p-4 p-md-5 rounded-4">
+                <div class="text-center mb-4">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px;">
+                        <i class="fas fa-tags fs-4"></i>
+                    </div>
+                    <h3 class="fw-bold text-dark">Add Category</h3>
+                    <p class="text-muted small">Define a new classification for lost and found items.</p>
+                </div>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <!-- Form Errors -->
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger border-0 small py-2">
+                            {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <!-- Category Name -->
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-secondary text-uppercase">Category Name</label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="text-danger small mt-1">{% for error in form.name.errors %}{{ error }}{% endfor %}</div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-secondary text-uppercase">Description</label>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <div class="text-danger small mt-1">{% for error in form.description.errors %}{{ error }}{% endfor %}</div>
+                        {% endif %}
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold shadow-sm py-2">
+                            Create Category
+                        </button>
+                        <a href="{% url 'admin-dashboard' %}" class="btn btn-link text-muted text-decoration-none small mt-1">
+                            Cancel and go back
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Hint for Admin -->
+            <div class="alert bg-light border-0 mt-4 rounded-4 text-center">
+                <p class="small text-muted mb-0">
+                    <i class="fas fa-info-circle me-1"></i>
+                    Categories are global and will be visible to all students across all colleges.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}

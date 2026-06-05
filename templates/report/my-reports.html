@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">My Reports</h2>
+
+    <div class="d-flex align-items-center gap-2">
+        <form method="GET" action="{% url 'my-reports' %}">
+            <input
+                type="text"
+                name="search"
+                class="form-control form-control-sm"
+                placeholder="Search by item name..."
+                value="{{ request.GET.search|default:'' }}"
+            >
+        </form>
+
+        <a href="{% url 'create-report' %}"
+           class="btn btn-primary rounded-pill px-4 btn-sm fw-medium shadow-sm">
+            Report New +
+        </a>
+    </div>
+</div>
+
+    <div class="row g-3">
+        {% for item in page_obj %}
+        <div class="col-12">
+            <div class="card border-0 shadow-sm p-3 rounded-4">
+                <div class="d-md-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-light rounded-3 p-3 me-3">
+                             {% if item.image %}
+                                <img src="{{ item.image.url }}" alt="{{ item.item_name }}" style="width: 60px; height: 60px; object-fit: cover;" class="rounded">
+                            {% endif %}
+                        </div>
+                        <div>
+                            <h6 class="fw-bold mb-0">{{ item.item_name }}</h6>
+                            <small class="text-muted">Posted: {{ item.created_at|date:"M d, Y" }} | <i class="fas fa-map-marker-alt ms-1"></i> {{ item.location }}</small>
+                        </div>
+                    </div>
+                    <div class="mt-2 mt-md-0 d-flex align-items-center gap-3">
+                        {% if item.status == 'lost' %}
+                            <span class="badge bg-danger-subtle text-danger rounded-pill px-3">Lost</span>
+                        {% elif item.status == 'found' %}
+                            <span class="badge bg-success-subtle text-success rounded-pill px-3">Found</span>
+                        {% else %}
+                            <span class="badge bg-dark text-white rounded-pill px-3">Recovered</span>
+                        {% endif %}
+                        <a href="{% url 'report-detail' item.uuid %}" class="btn btn-light btn-sm rounded-pill border fw-medium px-3">Manage</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center py-5 text-muted">You haven't reported any items yet.</div>
+        {% endfor %}
+    </div>
+
+    {% if page_obj.has_other_pages %}
+    <div class="d-flex justify-content-center mt-4">
+        <nav>
+            <ul class="pagination pagination-sm">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link border-0 shadow-sm text-primary" href="?page={{ page_obj.previous_page_number }}">Prev</a></li>
+                {% endif %}
+                <li class="page-item active"><span class="page-link border-0 bg-primary px-3">{{ page_obj.number }}</span></li>
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link border-0 shadow-sm text-primary" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

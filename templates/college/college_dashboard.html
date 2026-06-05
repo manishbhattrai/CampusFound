@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+
+    <div class="mb-5">
+        <h2 class="fw-bold text-dark mb-1">College Panel</h2>
+        <p class="text-muted small">Overview for <span class="text-primary fw-semibold">{{ user.college.name }}</span></p>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm p-3 rounded-4 h-100">
+                <div class="d-flex align-items-center">
+                    <div class="bg-primary bg-opacity-10 text-primary rounded-3 p-3 me-3">
+                        <i class="fas fa-users fa-lg"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted small mb-0">Total Students</h6>
+                        <h4 class="fw-bold mb-0">{{ total_students|default:"0" }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm p-3 rounded-4 h-100">
+                <div class="d-flex align-items-center">
+                    <div class="bg-warning bg-opacity-10 text-warning rounded-3 p-3 me-3">
+                        <i class="fas fa-user-clock fa-lg"></i>
+                    </div>
+                    <div>
+                        <h6 class="text-muted small mb-0">New Requests</h6>
+                        <h4 class="fw-bold mb-0 text-warning">{{ pending_requests|default:"0" }}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Main Content: Pending Registration Requests -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4">
+                <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center">
+                    <h5 class="fw-bold mb-0">Pending Registration Requests</h5>
+                    <a href="{% url 'registration-requests' %}" class="btn btn-link text-primary text-decoration-none small fw-bold p-0">Manage All</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light">
+                            <tr class="small text-muted fw-bold">
+                                <th class="px-4 py-3">STUDENT ID</th>
+                                <th>NAME</th>
+                                <th>EMAIL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for req in recent_requests %}
+                            <tr>
+                                <td class="px-4">
+                                    <span class="fw-semibold text-primary">{{ req.student_id }}</span>
+                                </td>
+                                <td>
+                                    <span class="text-dark fw-medium">{{ req.full_name }}</span>
+                                </td>
+                                <td>
+                                    <span class="text-muted small">{{ req.email }}</span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3" class="text-center py-5 text-muted small">
+                                    <i class="fas fa-user-check d-block mb-2 fs-3 opacity-25"></i>
+                                    No pending registration requests.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar: Quick Management -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                <div class="card-body p-4 text-center">
+                    <h6 class="fw-bold mb-3 text-start">Quick Management</h6>
+                    <div class="d-grid gap-3">
+                        <a href="{% url 'student-list' %}" class="btn btn-outline-primary rounded-pill text-start px-4 py-3 small fw-medium transition-all">
+                            <i class="fas fa-users me-2"></i> View Student Directory
+                        </a>
+                        <a href="{% url 'registration-requests' %}" class="btn btn-outline-warning rounded-pill text-start px-4 py-3 small fw-medium transition-all">
+                            <i class="fas fa-user-plus me-2"></i> Handle Requests
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-primary text-white border-0 shadow-sm rounded-4 p-4">
+                <h6 class="fw-bold mb-2">Need help?</h6>
+                <p class="small opacity-75 mb-0">For technical support regarding the dashboard, please contact the System Administrator.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

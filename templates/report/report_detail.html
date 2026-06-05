@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4 mb-5">
+
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'get-reports' %}" class="text-decoration-none small text-muted">Community Reports</a></li>
+            <li class="breadcrumb-item active small text-dark fw-medium" aria-current="page">Item Details</li>
+        </ol>
+    </nav>
+
+    <div class="row g-4">
+        <!-- LEFT: Image Section -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm overflow-hidden rounded-4">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" class="img-fluid w-100" style="max-height: 500px; object-fit: contain; background: #fafafa;">
+                {% else %}
+                    <div class="bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
+                        <i class="fas fa-image text-muted fa-5x opacity-25"></i>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- RIGHT: Information Section -->
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm p-4 p-md-5 h-100 rounded-4">
+
+                <div class="mb-4">
+                    {% if item.status == 'lost' %}
+                        <span class="badge bg-danger-subtle text-danger rounded-pill px-3 py-2 small fw-bold mb-3">LOST REPORT</span>
+                    {% elif item.status == 'found' %}
+                        <span class="badge bg-success-subtle text-success rounded-pill px-3 py-2 small fw-bold mb-3">FOUND REPORT</span>
+                    {% elif item.status == 'recovered' %}
+                        <span class="badge bg-dark text-white rounded-pill px-3 py-2 small fw-bold mb-3"><i class="fas fa-check-circle me-1"></i> RECOVERED</span>
+                    {% endif %}
+
+                    <h1 class="fw-bold text-dark display-6 mb-1">{{ item.item_name }}</h1>
+                    <p class="text-muted"><i class="fas fa-user-circle me-1"></i> Reported by {{ item.reported_by.full_name }}</p>
+                </div>
+
+                <!-- Info Grid -->
+                <div class="row g-4 mb-4">
+                    <div class="col-6">
+                        <label class="small text-muted d-block fw-medium mb-1 text-uppercase">Category</label>
+                        <p class="fw-semibold mb-0 text-dark">{{ item.category.name }}</p>
+                    </div>
+                    <div class="col-6">
+                        <label class="small text-muted d-block fw-medium mb-1 text-uppercase">Incident Date</label>
+                        <p class="fw-semibold mb-0 text-dark">{{ item.date_happened|date:"M d, Y" }}</p>
+                    </div>
+                    <div class="col-12">
+                        <label class="small text-muted d-block fw-medium mb-1 text-uppercase">Precise Location</label>
+                        <p class="fw-semibold mb-0 text-dark"><i class="fas fa-map-marker-alt text-primary me-2"></i>{{ item.location }}</p>
+                    </div>
+                </div>
+
+                <hr class="opacity-10 my-4">
+
+                <div class="mb-4">
+                    <label class="small text-muted d-block fw-medium mb-1 text-uppercase">Description</label>
+                    <p class="text-dark" style="line-height: 1.7;">{{ item.description }}</p>
+                </div>
+
+                <div class="mt-auto pt-4">
+                    {% if item.reported_by == user %}
+                        <div class="bg-light p-3 rounded-4 text-center border">
+                            <p class="small text-muted mb-2">This is your report.</p>
+                            {% if item.status == 'found' %}
+                            <a href="{% url 'manage-incoming-claims' %}" class="btn btn-primary w-100 py-3 rounded-pill fw-bold">
+                                <i class="fas fa-tasks me-2"></i> Review Incoming Claims
+                            </a>
+                            {% endif %}
+                        </div>
+
+                    {% elif item.status == 'recovered' %}
+                        <div class="alert bg-dark text-white border-0 rounded-4 p-3 text-center mb-0">
+                            <i class="fas fa-check-double me-2"></i> This item has been successfully returned.
+                        </div>
+
+                    {% elif item.status == 'found' %}
+                        {% if active_claim %}
+                            {% if active_claim.status == 'pending' %}
+                                <button class="btn btn-secondary w-100 py-3 rounded-pill fw-bold" disabled>
+                                    <i class="fas fa-clock me-2"></i> Claim Pending Review
+                                </button>
+                                <p class="text-center text-muted small mt-2">The finder is currently reviewing your answer.</p>
+                            {% elif active_claim.status == 'approved' %}
+                                <div class="alert alert-success border-0 rounded-4 text-center">
+                                    <i class="fas fa-check-circle me-2"></i> Claim Approved! View contact info in "My Claims".
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <a href="{% url 'create-claim' item.id %}" class="btn btn-primary w-100 py-3 rounded-pill fw-bold shadow-sm">
+                                <i class="fas fa-hand-holding-heart me-2"></i> Claim this Item
+                            </a>
+                            <p class="text-center text-muted small mt-2">You must answer the finder's security question.</p>
+                        {% endif %}
+
+                    {% else %}
+                        <div class="alert bg-light border-0 rounded-4 p-3 mb-0">
+                            <i class="fas fa-info-circle text-primary me-2"></i>
+                            This user lost this item. If you found it, please report it or message them.
+                        </div>
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+   {% if matches %}
+<div class="mt-5 pt-5 border-top">
+    <div class="d-flex align-items-center mb-4">
+        <div class="bg-primary bg-opacity-10 p-2 rounded-3 me-3 text-primary">
+            <i class="fas fa-wand-magic-sparkles"></i>
+        </div>
+        <div>
+            <h4 class="fw-bold mb-0">Top Suggestions</h4>
+            <p class="text-muted small mb-0">We found these items that match your lost report description.</p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        {% for match_item, score in matches %}
+            <div class="col-md-6 col-lg-3">
+                <div class="card h-100 border-0 shadow-sm overflow-hidden rounded-4">
+                    <div class="position-relative">
+                        {% if match_item.image %}
+                            <img src="{{ match_item.image.url }}" class="card-img-top" style="height: 150px; object-fit: cover;">
+                        {% else %}
+                            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 150px;">
+                                <i class="fas fa-box-open text-muted opacity-25 fa-2x"></i>
+                            </div>
+                        {% endif %}
+
+                        <div class="position-absolute top-0 start-0 m-2">
+                            <span class="badge bg-dark rounded-pill px-2 py-1 small">
+                                {{ score|floatformat:0 }}% Match
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-3 d-flex flex-column">
+                        <h6 class="fw-bold text-dark mb-1 text-truncate">{{ match_item.item_name }}</h6>
+                        <p class="text-muted mb-3" style="font-size: 0.75rem;">
+                            <i class="fas fa-map-marker-alt me-1 text-primary"></i> {{ match_item.location }}
+                        </p>
+
+                        <div class="mt-auto">
+                            <a href="{% url 'report-detail' match_item.uuid %}" class="btn btn-sm btn-outline-primary w-100 rounded-pill fw-semibold">
+                                View Item
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="fw-bold mb-4">Claim Requests</h3>
+
+    <div class="card border-0 shadow-sm overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                    <tr class="small text-muted fw-bold">
+                        <th class="px-4">STUDENT</th>
+                        <th>ITEM</th>
+                        <th>THEIR PROOF/ANSWER</th>
+                        <th class="text-end px-4">ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for claim in incoming_claims %}
+                    <tr>
+                        <td class="px-4">
+                            <div class="fw-bold">{{ claim.student.full_name }}</div>
+                            <div class="small text-muted">{{ claim.student.email }}</div>
+                        </td>
+                        <td><span class="badge bg-light text-dark border">{{ claim.item.item_name }}</span></td>
+                        <td><p class="small mb-0 text-muted" style="max-width: 300px;">"{{ claim.verification_answer }}"</p></td>
+                        <td class="text-end px-4">
+                            <form action="{% url 'process-claim' claim.id %}" method="POST" class="d-inline">
+                                {% csrf_token %}
+                                <button name="action" value="approve" class="btn btn-sm btn-success rounded-pill px-3">Approve</button>
+                                <button name="action" value="reject" class="btn btn-sm btn-outline-danger rounded-pill px-3 ms-1">Reject</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center py-5 text-muted">No pending claims to review.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

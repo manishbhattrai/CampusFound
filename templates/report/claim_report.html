@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="text-center mb-4">
+                <div class="bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center shadow-sm mb-3" style="width: 70px; height: 70px;">
+                    <i class="fas fa-user-check fs-3"></i>
+                </div>
+                <h3 class="fw-bold">Submit a Claim</h3>
+                <p class="text-muted">You are claiming: <span class="text-dark fw-semibold">{{ item.item_name }}</span></p>
+            </div>
+
+            <div class="card border-0 shadow-sm p-4 p-md-5 rounded-4">
+
+                {% if form.errors %}
+                    <div class="alert alert-danger border-0 rounded-3 small">
+                        Please correct the errors below.
+                    </div>
+                {% endif %}
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-secondary text-uppercase mb-3">Question from Finder</label>
+                        <div class="p-3 rounded-4 bg-light border-start border-primary border-4">
+                            <p class="mb-0 fw-medium text-dark italic">"{{ item.verification_question }}"</p>
+                        </div>
+                    </div>
+
+                    <!-- The Answer Input -->
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-secondary text-uppercase">Your Answer</label>
+                        {{ form.verification_answer }}
+                        {% if form.verification_answer.errors %}
+                            <div class="text-danger small mt-2">
+                                <i class="fas fa-exclamation-circle me-1"></i> {{ form.verification_answer.errors.0 }}
+                            </div>
+                        {% endif %}
+                        <div class="form-text small mt-2">
+                            The finder will review this answer. Be as descriptive as possible.
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-pill fw-bold shadow-sm">
+                            Submit My Answer
+                        </button>
+                        <a href="{% url 'report-detail' item.uuid %}" class="btn btn-link text-muted text-decoration-none small mt-2">
+                            <i class="fas fa-arrow-left me-1"></i> Go back to details
+                        </a>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
