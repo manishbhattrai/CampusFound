@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import dj_database_url
 
 load_dotenv()
 
@@ -88,6 +89,7 @@ DATABASES = {
         'PORT': os.getenv("DATABASE_PORT","5432")
     }
 }
+DATABASES["default"] = dj_database_url.parse(os.getenv("DATABASE_URL"))
 
 AUTH_USER_MODEL='user.CustomUser'
 
