@@ -26,7 +26,7 @@ class Item(models.Model):
     ]
 
     uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    reported_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    reported_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="items")
     item_name = models.CharField(max_length=225)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     description = models.TextField()
@@ -48,7 +48,7 @@ class Claim(models.Model):
     ]
 
     item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name="claims")
-    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE, related_name="claims")
     verification_answer = models.CharField(max_length=225)
     proof_image = models.ImageField(upload_to='claims/', blank=True, null=True)
     status = models.CharField(max_length=12,choices=CLAIM_STATUS_CHOICES, default='pending')

@@ -287,7 +287,15 @@ def home_page(request):
 @login_required(login_url='login')
 @student_required
 def user_profile(request):
-    return render(request,'student/student_profile.html')
+
+    my_items_count = request.user.items.count()
+    my_claims_count = request.user.claims.count()
+
+    context = {
+        'my_items_count':my_items_count,
+        'my_claims_count':my_claims_count
+    }
+    return render(request,'student/student_profile.html',context=context)
 
 @login_required(login_url='login')
 @student_required
