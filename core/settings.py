@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
+'''DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.environ['DATABASE_NAME'],
@@ -88,9 +88,14 @@ DATABASES = {
         'HOST': os.getenv("DATABASE_HOST","localhost"),
         'PORT': os.getenv("DATABASE_PORT","5432")
     }
-}
-DATABASES["default"] = dj_database_url.parse(os.getenv("DATABASE_URL"))
+}'''
+##DATABASES["default"] = dj_database_url.parse(os.getenv("DATABASE_URL"))
 
+DATABASES = {
+    "default": dj_database_url.config(
+        default=os.getenv("DATABASE_URL"),
+    )
+}
 AUTH_USER_MODEL='user.CustomUser'
 
 # Password validation
