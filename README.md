@@ -48,8 +48,8 @@ Items reported in the "College of Engineering" are only visible to students with
 | Layer | Technology                                          |
 | :--- |:----------------------------------------------------|
 | **Backend** | Python 3.x, Django 5.x                              |
-| **Frontend** | Bootstrap 5, CSS, JavaScript       |
-| **Database** | MySQL                                               |
+| **Frontend** | Bootstrap 5, CSS, JavaScript                        |
+| **Database** | PostgreSQL                                          |
 | **Auth** | Role-Based Access Control (RBAC), Custom User Model |
 
 
